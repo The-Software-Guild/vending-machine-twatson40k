@@ -1,15 +1,18 @@
+package com.VendingMachine.DTO;
+
+import java.math.BigDecimal;
 
 public class Item {
-    private String itemId;
+    private final String itemId;
     private String itemName;
-    private String priceTag;
-    private String noOfItem;
+    private BigDecimal priceTag;
+    private int noOfItem;
 
     public Item(String itemId) {
         this.itemId = itemId;
     }
 	
-	public String getItemID() {
+	public String getItemId() {
         return itemId;
     }
 
@@ -21,19 +24,19 @@ public class Item {
         this.itemName = itemName;
     }
 
-    public int getPriceTag() {
+    public BigDecimal getPriceTag() {
         return priceTag;
     }
 
-    public void setPriceTag(int priceTag) {
+    public void setPriceTag(BigDecimal priceTag) {
         this.priceTag = priceTag;
     }
 
-    public String getNoOfItem() {
+    public int getNoOfItem() {
         return noOfItem;
     }
 
-    public void setNoOfItem(String noOfItem) {
+    public void setNoOfItem(int noOfItem) {
         this.noOfItem = noOfItem;
     }   
 }

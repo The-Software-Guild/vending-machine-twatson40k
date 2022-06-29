@@ -1,4 +1,4 @@
-
+package com.VendingMachine.UI;
 
 public interface UserIO {
         void print(String msg);

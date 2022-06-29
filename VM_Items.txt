@@ -1,0 +1,16 @@
+D1::Still Water::1.00::25
+C1::Walkers Ready Salted::1.40::25
+D2::Sparkling Water::1.00::25
+B1::Shortbread::3.00::12
+C2::Walkers Cheese and Onion::1.40::25
+D3::Coke Cola::1.00::25
+A1::Mars Bar::1.20::15
+B2::Twix::0.90::25
+C3::Walkers Prawn Cocktail::1.40::25
+D4::Oasis::1.00::25
+A2::Kit Kat::2.25::20
+B3::Jelly Beans::0.50::30
+C4::Walkers Salt and Vinegar::1.40::25
+A3::Chocolate Caramel Buttons::1.90::12
+B4::Chocolate Buttons::1.50::12
+A4::Flakes::2.30::12

@@ -1,14 +1,5 @@
+package com.VendingMachine.UI;
 
-/*********************************
- * The Software Guild
- * Copyright (C) 2020 Wiley edu LLC - All Rights Reserved
- *********************************/
-
-/**
- * TSG Official Implementation of the UserIO interface
- * May your view be ever in your favor!
- * @author ahill
- */
 import java.util.Scanner;
 
 public class UserIOConsoleImpl implements UserIO {
