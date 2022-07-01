@@ -10,6 +10,7 @@ import com.VendingMachine.UI.UserIO;
 import com.VendingMachine.UI.UserIOConsoleImpl;
 import com.VendingMachine.UI.VM_View;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 
@@ -17,20 +18,19 @@ public class VM_Controller {
 
     private final UserIO io = new UserIOConsoleImpl();
     private final VM_View view;
-    private final VM_DAO dao;
     private final VM_ServiceLayer service;
-    public VM_Controller(VM_ServiceLayer service, VM_View view, VM_DAO dao){
+    public VM_Controller(VM_ServiceLayer service, VM_View view){
         this.service = service;
         this.view = view;
-        this.dao = dao;
     }
-
 
         public void run() {
             boolean keepGoing = true;
             int menuSelection = 0;
             try {
+                listItems();
             while (keepGoing) {
+
 
                 menuSelection = getMenuSelection();
 
@@ -39,18 +39,24 @@ public class VM_Controller {
                         listItems();
                         break;
                     case 2:
-                        purchaseItem();
+                        insertCoin();
                         break;
                     case 3:
-                        io.print("RESUPPLY ITEM");
+                        purchaseItem();
                         break;
                     case 4:
-                        createItem();
+                        displayBalance();
                         break;
                     case 5:
-                        removeItem();
+                        io.print("Restock Item");
                         break;
                     case 6:
+                        createItem();
+                        break;
+                    case 7:
+                        removeItem();
+                        break;
+                    case 8:
                         keepGoing = false;
                         break;
                     default:
@@ -59,7 +65,7 @@ public class VM_Controller {
 
             }
             exitMessage();
-        } catch (VM_PersistenceException e){
+        } catch (VM_PersistenceException | VM_DuplicateIdException | VM_DataValidationException e){
         view.displayErrorMessage(e.getMessage());
     }
     }
@@ -78,25 +84,42 @@ public class VM_Controller {
                 hasErrors = false;
             } catch (VM_DuplicateIdException | VM_DataValidationException e){
                 hasErrors = true;
-                view.displayErrorMessage(e.getMessage());}
+                view.displayErrorMessage(e.getMessage());
+            }
             } while (hasErrors);
         }
-    private void listItems() throws VM_PersistenceException {
+    private void listItems() throws VM_PersistenceException, VM_DuplicateIdException, VM_DataValidationException {
         //view.displayDisplayAllBanner();
-        List<Item> itemList = dao.getAllItems();
+        List<Item> itemList = service.getAllItems();
         view.displayItemList(itemList);
     }
-    private void purchaseItem() throws VM_PersistenceException {
-        //view.displayDisplayItemBanner();
+    private void purchaseItem() throws VM_PersistenceException, VM_DuplicateIdException,
+            VM_DataValidationException {
         String itemId = view.getItemIdChoice();
-        Item item = dao.buyItem(itemId);
+        String item = service.buyItem(itemId);
         view.displayItem(item);
     }
     private void removeItem() throws VM_PersistenceException {
         view.displayRemoveItemBanner();
         String itemId = view.getItemIdChoice();
         service.removeItem(itemId);
-        view.displayRemoveSuccessBanner();
+        view.displayRemoveResult();
+    }
+
+    private void displayBalance() throws VM_PersistenceException {
+        view.displayChange(service.getSessionBalance());
+    }
+
+    //private void restockItem(){}
+
+    private void insertCoin() throws VM_PersistenceException{
+        String money = view.getMoney();
+        try {
+            BigDecimal coinBalance = service.setSessionBalance(new BigDecimal(money));
+            view.displayMoneySuccess(coinBalance);
+        } catch (Exception e) {
+            view.displayErrorMessage("Invalid Input, please try again.");
+        }
     }
 
     private void unknownCommand() {
@@ -104,7 +127,7 @@ public class VM_Controller {
     }
 
     private void exitMessage() {
-        view.displayExitBanner();
+        view.displayExitBanner(service.getSessionBalance());
     }
 
 }

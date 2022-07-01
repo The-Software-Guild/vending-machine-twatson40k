@@ -16,13 +16,15 @@ public class VM_View {
     public int printMenuAndGetSelection() {
         io.print("Main Menu");
         io.print("1. List Items");
-        io.print("2. Purchase Item");
-        io.print("3. Resupply Selected Item");
-        io.print("4. Create New Item or Edit Current Item");
-        io.print("5. Remove a Item");
-        io.print("6. Exit");
+        io.print("2. Insert Money");
+        io.print("3. Purchase Item");
+        io.print("4. Display Balance");
+        io.print("5. Restock Item");
+        io.print("6. Create New Item");
+        io.print("7. Remove a Item");
+        io.print("8. Exit");
 
-        return io.readInt("Please select from the above choices.", 1, 6);
+        return io.readInt("Please select from the above choices.", 1, 8);
     }
 
     public Item getNewItemInfo() {
@@ -46,7 +48,7 @@ public class VM_View {
 
     public void displayItemList(List<Item> itemList) {
         for (Item currentItem : itemList) {
-            String studentInfo = String.format("ID: %s | %s | £ %s | %s",
+            String studentInfo = String.format("%s | %s | £ %s | %s",
                     currentItem.getItemId(),
                     currentItem.getItemName(),
                     currentItem.getPriceTag(),
@@ -63,25 +65,38 @@ public class VM_View {
         return io.readString("Please enter the Item ID.");
     }
 
-    public void displayItem(Item item) {
-        if (item != null) {
-            io.print("ID: " + item.getItemId() + " || Item Name: " + item.getItemName() +
+    public void displayItem(String item) {
+       /* if (item != null) {
+            io.print("ID: " + item. + " || Item Name: " + item.getItemName() +
                    " || £" + item.getPriceTag() + " || Amount: " + item.getNoOfItem());
             io.print("");
         } else {
             io.print("No such item.");
+        }*/
+       System.out.println(item);
+    }
+
+    public String getMoney(){return io.readString("=== Insert Money amount ===");}
+    public void displayMoneySuccess(BigDecimal coinBalance){
+        if(coinBalance != null){
+            io.print("=== " + coinBalance + " Was Added ===");}
+        else{
+            io.print("Unsuccessfully.");
         }
         io.readString("Please hit enter to continue.");
     }
+        //io.print("=== Money successfully Added.  Please hit enter to continue===");}
+        public void displayRestockItemBanner() {
+            io.print("=== Restock Item ===");
+        }
 
     public void displayRemoveItemBanner () {
-        io.print("=== Remove Student ===");
+        io.print("=== Remove Item ===");
     }
 
-    public void displayRemoveSuccessBanner() {
-        io.readString("Item successfully remoted.  Please hit enter to continue");
-    }
-    public void displayRemoveResult(Item itemRecord) {
+    //public void displayRemoveSuccessBanner() {io.readString("Item successfully removed.  Please hit enter to continue");}
+    public void displayRemoveResult() {
+        Item itemRecord = null;
         if(itemRecord != null){
             io.print("Item successfully removed.");
         }else{
@@ -89,8 +104,12 @@ public class VM_View {
         }
         io.readString("Please hit enter to continue.");
     }
+    public void displayChange(BigDecimal sessionBalance){
+        io.readString("Your current change is £" + sessionBalance + " Please hit enter to continue.");
+    }
 
-    public void displayExitBanner() {
+    public void displayExitBanner(BigDecimal sessionBalance) {
+        io.print("Your overall change is " + sessionBalance);
         io.print("Good Bye!!!");
     }
 

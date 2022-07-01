@@ -14,5 +14,8 @@ public interface VM_DAO {
 
     Item removeItem(String ItemId) throws VM_PersistenceException;
 
-    Item updateItemAmount(String ItemId, Item item) throws VM_PersistenceException;
+
+    Item updateItemAmount(Item editItem) throws VM_PersistenceException;
+
+    //Item updateItemAmount(String itemId) throws VM_PersistenceException;
 }

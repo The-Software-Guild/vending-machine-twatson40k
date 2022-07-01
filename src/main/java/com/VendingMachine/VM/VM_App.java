@@ -19,7 +19,7 @@ public class VM_App {
         VM_DAO myDao = new VM_DAOFileImpl();
         VM_AuditDAO myAuditDao = new VM_AuditDAOFileImpl();
         VM_ServiceLayer myService = new VM_ServiceLayerImpl(myDao, myAuditDao);
-        VM_Controller controller = new VM_Controller(myService, myView, myDao);
+        VM_Controller controller = new VM_Controller(myService, myView);
         controller.run();
     }   
 }
