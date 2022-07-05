@@ -1,16 +1,15 @@
-E1::Sweet Roll::1.20::0
-D1::Still Water::1.00::25
+D1::Still Water::1.00::26
 C1::Walkers Ready Salted::1.40::25
-D2::Sparkling Water::1.00::25
-B1::Shortbread::3.00::12
+D2::Sparkling Water::1.00::34
+B1::Shortbread::3.00::29
 C2::Walkers Cheese and Onion::1.40::25
-D3::Coke Cola::1.00::25
-A1::Mars Bar::1.20::14
-B2::Twix::0.90::25
+D3::Coke Cola::1.00::26
+A1::Mars Bar::1.20::26
+B2::Twix::0.90::61
 C3::Walkers Prawn Cocktail::1.40::25
-D4::Oasis::1.00::24
+D4::Oasis::1.00::50
 A2::Kit Kat::2.25::20
-B3::Jelly Beans::0.50::30
+B3::Jelly Beans::0.50::29
 C4::Walkers Salt and Vinegar::1.40::25
 A3::Chocolate Caramel Buttons::1.90::12
 B4::Chocolate Buttons::1.50::12

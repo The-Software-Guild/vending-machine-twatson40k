@@ -1,34 +1,30 @@
 package com.VendingMachine.Controller;
 
-import com.VendingMachine.DAO.VM_DAO;
 import com.VendingMachine.DAO.VM_PersistenceException;
 import com.VendingMachine.DTO.Item;
-import com.VendingMachine.Service.VM_DataValidationException;
-import com.VendingMachine.Service.VM_DuplicateIdException;
+import com.VendingMachine.Service.VM_InsufficientFundsException;
+import com.VendingMachine.Service.VM_NoItemInventoryException;
 import com.VendingMachine.Service.VM_ServiceLayer;
-import com.VendingMachine.UI.UserIO;
-import com.VendingMachine.UI.UserIOConsoleImpl;
 import com.VendingMachine.UI.VM_View;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.List;
 
 
 public class VM_Controller {
-
-    private final UserIO io = new UserIOConsoleImpl();
     private final VM_View view;
     private final VM_ServiceLayer service;
-    public VM_Controller(VM_ServiceLayer service, VM_View view){
+
+    public VM_Controller(VM_ServiceLayer service, VM_View view) {
         this.service = service;
         this.view = view;
     }
 
-        public void run() {
-            boolean keepGoing = true;
-            int menuSelection = 0;
-            try {
-                listItems();
+    public void run() {
+        boolean keepGoing = true;
+        int menuSelection;
+        try {
+            listItems();
             while (keepGoing) {
 
 
@@ -48,15 +44,9 @@ public class VM_Controller {
                         displayBalance();
                         break;
                     case 5:
-                        io.print("Restock Item");
+                        restockItem();
                         break;
                     case 6:
-                        createItem();
-                        break;
-                    case 7:
-                        removeItem();
-                        break;
-                    case 8:
                         keepGoing = false;
                         break;
                     default:
@@ -65,46 +55,56 @@ public class VM_Controller {
 
             }
             exitMessage();
-        } catch (VM_PersistenceException | VM_DuplicateIdException | VM_DataValidationException e){
-        view.displayErrorMessage(e.getMessage());
+        } catch (VM_PersistenceException | VM_InsufficientFundsException | VM_NoItemInventoryException e) {
+            view.displayErrorMessage(e.getMessage());
+        }
     }
-    }
-	
-	private int getMenuSelection() {
+
+    private int getMenuSelection() {
         return view.printMenuAndGetSelection();
     }
-    private void createItem() throws VM_PersistenceException {
-        view.displayCreateItemBanner();
-        Boolean hasErrors = false;
-        do {
-            Item currentItem = view.getNewItemInfo();
-            try{
-                service.addItem(currentItem);
-                view.displayCreateSuccessBanner();
-                hasErrors = false;
-            } catch (VM_DuplicateIdException | VM_DataValidationException e){
-                hasErrors = true;
+
+    private void restockItem() throws VM_PersistenceException {
+        view.displayRestockItemBanner();
+        //boolean hasErrors;
+        //do {
+            try {
+                String itemId = view.getItemIdChoice();
+                service.dataValidation(itemId);
+                int newNoOfItems = view.updateNoOfItems();
+                service.resupplyItem(itemId, newNoOfItems);
+                view.displayRestockSuccessBanner();
+                //hasErrors = false;
+            } catch (VM_NoItemInventoryException e) {
+               // hasErrors = true;
                 view.displayErrorMessage(e.getMessage());
             }
-            } while (hasErrors);
-        }
-    private void listItems() throws VM_PersistenceException, VM_DuplicateIdException, VM_DataValidationException {
-        //view.displayDisplayAllBanner();
+       // } while (hasErrors);
+    }
+
+    private void listItems() throws VM_PersistenceException {
         List<Item> itemList = service.getAllItems();
         view.displayItemList(itemList);
     }
-    private void purchaseItem() throws VM_PersistenceException, VM_DuplicateIdException,
-            VM_DataValidationException {
-        String itemId = view.getItemIdChoice();
-        String item = service.buyItem(itemId);
-        view.displayItem(item);
-    }
-    private void removeItem() throws VM_PersistenceException {
-        view.displayRemoveItemBanner();
-        String itemId = view.getItemIdChoice();
-        service.removeItem(itemId);
-        view.displayRemoveResult();
-    }
+
+   private void purchaseItem() throws VM_PersistenceException, VM_InsufficientFundsException, VM_NoItemInventoryException {
+       boolean hasErrors;
+       try {
+           do {
+               try {
+                   String itemId = view.getItemIdChoice();
+                   String item = service.buyItem(itemId);
+                   view.displayItem(item);
+                   hasErrors = false;
+               } catch (VM_NoItemInventoryException e) {
+                   hasErrors = true;
+                   view.displayErrorMessage(e.getMessage());
+               }
+           } while (hasErrors);
+       } catch (VM_InsufficientFundsException e) {
+           view.displayErrorMessage(e.getMessage());
+       }
+   }
 
     private void displayBalance() throws VM_PersistenceException {
         view.displayChange(service.getSessionBalance());
@@ -112,7 +112,7 @@ public class VM_Controller {
 
     //private void restockItem(){}
 
-    private void insertCoin() throws VM_PersistenceException{
+    private void insertCoin() throws VM_PersistenceException {
         String money = view.getMoney();
         try {
             BigDecimal coinBalance = service.setSessionBalance(new BigDecimal(money));

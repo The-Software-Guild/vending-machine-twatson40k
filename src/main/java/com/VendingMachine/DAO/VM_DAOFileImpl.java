@@ -8,13 +8,6 @@ public class VM_DAOFileImpl implements VM_DAO {
     private final Map<String, Item> items = new HashMap<>();
     public static final String VM_Items_FILE = "VM_Items.txt";
     public static final String DELIMITER = "::";
-    @Override
-    public Item addItem(String itemId, Item item) throws VM_PersistenceException {
-        loadItem();
-        Item newItem = items.put(itemId, item);
-        writeItem();
-        return newItem;
-    }
 
     @Override
     public List<Item> getAllItems() throws VM_PersistenceException {
@@ -29,22 +22,17 @@ public class VM_DAOFileImpl implements VM_DAO {
     }
 
     @Override
-    public Item removeItem(String itemId) throws VM_PersistenceException {
+    public void updateItemAmount(Item editItem) throws VM_PersistenceException {
         loadItem();
-        Item removedItem = items.remove(itemId);
-        writeItem();
-        return removedItem;
-    }
-
-    @Override
-    public Item updateItemAmount(Item editItem) throws VM_PersistenceException {
-        loadItem();
-        editItem.setNoOfItem(editItem.getNoOfItem() - 1);
         Item updateItem = items.put(editItem.getItemId(), editItem);
         writeItem();
-        return updateItem;
     }
+    @Override
+    public Item getItem(String itemIDNo) throws VM_PersistenceException {
+        loadItem();
+        return items.get(itemIDNo);
 
+    }
 
     private Item unmarshallItems(String itemAsText){
 
