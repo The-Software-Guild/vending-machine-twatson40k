@@ -24,7 +24,7 @@ public class VM_DAOFileImpl implements VM_DAO {
     @Override
     public void updateItemAmount(Item editItem) throws VM_PersistenceException {
         loadItem();
-        Item updateItem = items.put(editItem.getItemId(), editItem);
+        items.put(editItem.getItemId(), editItem);
         writeItem();
     }
     @Override

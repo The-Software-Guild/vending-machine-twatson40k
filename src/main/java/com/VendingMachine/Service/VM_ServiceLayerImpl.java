@@ -40,7 +40,7 @@ public class VM_ServiceLayerImpl implements VM_ServiceLayer {
             item.setNoOfItem(item.getNoOfItem() + noOfItems);
             dao.updateItemAmount(item);
             auditDao.writeAuditEntry("RESTOCKED: " + LocalDate.now() +
-                    " Item " + item.getItemId() + " Has Been Restock.");
+                    " Item " + item.getItemId() + " Has Been Restock");
 
             if (dao.buyItem(item.getItemId()) == null) {
                 throw new VM_NoItemInventoryException(

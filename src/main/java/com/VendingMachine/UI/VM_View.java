@@ -60,7 +60,7 @@ public class VM_View {
 
     public void displayMoneySuccess(BigDecimal coinBalance) {
         if (coinBalance != null) {
-            io.print("=== " + coinBalance + " Was Added ===");
+            io.print("=== Current Balance £" + coinBalance + "  ===");
         } else {
             io.print("Unsuccessfully.");
         }
