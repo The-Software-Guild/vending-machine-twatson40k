@@ -18,7 +18,7 @@ public class VM_AuditDAOFileImpl implements VM_AuditDAO{
         }
 
         LocalDateTime timestamp = LocalDateTime.now();
-        out.println(timestamp.toString() + " : " + entry);
+        out.println(timestamp + " : " + entry);
         out.flush();
     }
 }
