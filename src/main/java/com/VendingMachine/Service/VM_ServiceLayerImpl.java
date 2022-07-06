@@ -37,14 +37,14 @@ public class VM_ServiceLayerImpl implements VM_ServiceLayer {
     public void resupplyItem(String itemId, int noOfItems) throws
             VM_PersistenceException, VM_NoItemInventoryException {
         Item item = dao.getItem(itemId);
-            item.setNoOfItem(item.getNoOfItem() + noOfItems);
-            dao.updateItemAmount(item);
-            auditDao.writeAuditEntry("RESTOCKED: " + LocalDate.now() +
-                    " Item " + item.getItemId() + " Has Been Restock");
+        item.setNoOfItem(item.getNoOfItem() + noOfItems);
+        dao.updateItemAmount(item);
+        auditDao.writeAuditEntry("RESTOCKED: " + LocalDate.now() +
+                " Item " + item.getItemId() + " Has Been Restock");
 
-            if (dao.buyItem(item.getItemId()) == null) {
-                throw new VM_NoItemInventoryException(
-                        "ERROR: Could not restock " + item.getItemId());
+        if (dao.buyItem(item.getItemId()) == null) {
+            throw new VM_NoItemInventoryException(
+                    "ERROR: Could not restock " + item.getItemId());
             }
         }
 
